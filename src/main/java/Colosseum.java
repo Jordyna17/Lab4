@@ -10,6 +10,7 @@ import java.util.Scanner;
  * @see <a href="https://cs125.cs.illinois.edu/lab/4/">Lab 4 Description</a>
  */
 public class Colosseum {
+
     /**
      * The maximum number of hit points we will allow a Pokemon to start with.
      */
@@ -34,7 +35,7 @@ public class Colosseum {
      * Input scanner. Use this to take in user's input for buildPokemon(). <br>
      * Useful functions: next(), nextInt() .
      */
-    static Scanner myScan;
+    static Scanner myScan = new Scanner(System.in);
 
     /**
      * How we will build our Pokemon to battle.
@@ -43,7 +44,7 @@ public class Colosseum {
      * <p>
      * Requirements we should check the user for: <br>
      * - Hit points are between 1 and MAX_HIT_POINTS <br>
-     * - No more than 50 points are split between attack level and defense leve <br>
+     * - No more than 50 points are split between attack level and defense level <br>
      * - Attack level and defense level must have at least 1 point each <br>
      * Example of how this will look to the user:
      * <p>
@@ -72,8 +73,56 @@ public class Colosseum {
      *         Implement this function.
      */
     public static Pokemon buildPokemon() {
-        Pokemon tempPokemon = new Pokemon();
-        return tempPokemon;
+
+        System.out.println("What's your pokemon's name? ");
+        String pokename = myScan.next();
+
+        System.out.println("What's your pokemon's hit level? ");
+        int pokehit = myScan.nextInt();
+
+        while (pokehit > MAX_HIT_POINTS) {
+
+            System.out.println("Your hit level is too big! Make sure it is under " + MAX_HIT_POINTS + "!");
+
+            System.out.println("What's your pokemon's hit level? ");
+            pokehit = myScan.nextInt();
+
+
+        }
+
+        System.out.println("What's your pokemon's attack level? ");
+        int pokeattack = myScan.nextInt();
+
+        while (pokeattack >= MAX_HIT_POINTS || pokeattack < 0) {
+
+            System.out.println("Your attack level must be between 1-49! Try again. ");
+
+            System.out.println("What's your pokemon's attack level? ");
+            pokeattack = myScan.nextInt();
+
+
+        }
+
+        int limit = MAX_HIT_POINTS - pokeattack;
+
+        System.out.println("What's your pokemon's defense level? ");
+        System.out.println("You have " + limit + " points left! (0 or greater)");
+        int pokedefense = myScan.nextInt();
+
+        while (pokedefense > limit || pokedefense < 0) {
+
+            System.out.println("Your defense level is not acceptable! Make sure it is " + limit + " or under! ");
+
+            System.out.println("What's your pokemon's defense level? ");
+            pokedefense = myScan.nextInt();
+
+
+        }
+
+        Pokemon poke = new Pokemon(pokename, pokehit, pokeattack, pokedefense);
+
+
+        return poke;
     }
 
     /**
@@ -90,7 +139,21 @@ public class Colosseum {
      * Implement this function.
      */
     public static void printWhoIsAhead() {
-        System.out.println("Implement me!");
+
+        if (firstPokemon.hitPoints > secondPokemon.hitPoints) {
+            System.out.println(firstPokemon.name + " is ahead!");
+        }
+
+        if (firstPokemon.hitPoints < secondPokemon.hitPoints) {
+
+            System.out.println(secondPokemon.name + " is ahead!");
+        }
+
+        if (firstPokemon.hitPoints == secondPokemon.hitPoints) {
+
+            System.out.println("No Pokemon is ahead! They currently have the same health");
+        }
+
     }
 
     /**
@@ -101,7 +164,14 @@ public class Colosseum {
      * Write this function.
      */
     public static void determineWinner() {
-        System.out.println("Implement me!");
+        if (firstPokemon.hitPoints == 0) {
+
+            System.out.println(firstPokemon.name + " wins!");
+        }
+        if (secondPokemon.hitPoints == 0) {
+
+            System.out.println(secondPokemon.name + " wins!");
+        }
     }
 
     /**
@@ -145,7 +215,7 @@ public class Colosseum {
              * Swap Pokemon for second outcome.
              */
             System.out.print("second");
-            Pokemon tempPokemon = new Pokemon();
+            Pokemon tempPokemon;
             tempPokemon = firstPokemon;
             firstPokemon = secondPokemon;
             secondPokemon = tempPokemon;
